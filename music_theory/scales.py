@@ -17,21 +17,22 @@ class Scale:
     def __init__(self, notes):
         self.notes = notes
 
+    def get_notes(self):
+        return [note_to_letter(note) for note in self.notes]
+
+class MajorScale(Scale):
     @classmethod
-    def major(cls, root):
-        # Start with the root note number
+    def create(cls, root):
         start_note = letter_to_note(root.upper())
 
         if start_note is None:
             raise ValueError(f"Invalid note: {root}")
         
-        # Define the intervals for a major scale: W, W, H, W, W, W, H
         intervals = [WHOLE_STEP, WHOLE_STEP, HALF_STEP, WHOLE_STEP, WHOLE_STEP, WHOLE_STEP, HALF_STEP]
         
-        # Generate the notes of the scale based on the intervals
         notes = []
         current_note = start_note
-        for i in range(8):  # Major scale has 7 distinct pitches + an octave
+        for i in range(8):  
             if i == 0:
                 notes.append(current_note)
             else:
@@ -40,21 +41,19 @@ class Scale:
         
         return cls(notes)
 
+class MinorScale(Scale):
     @classmethod
-    def minor_natural(cls, root):
-        # Start with the root note number
-        start_note = letter_to_note(root)
+    def create_natural(cls, root):
+        start_note = letter_to_note(root.upper())
 
         if start_note is None:
             raise ValueError(f"Invalid note: {root}")
 
-        # Define the intervals for a natural minor scale: W, H, W, W, H, W, W
         intervals = [WHOLE_STEP, HALF_STEP, WHOLE_STEP, WHOLE_STEP, HALF_STEP, WHOLE_STEP, WHOLE_STEP]
         
-        # Generate the notes of the scale based on the intervals
         notes = []
         current_note = start_note
-        for i in range(8):  # Minor scale has 7 distinct pitches + an octave
+        for i in range(8):  
             if i == 0:
                 notes.append(current_note)
             else:
@@ -64,20 +63,17 @@ class Scale:
         return cls(notes)
 
     @classmethod
-    def minor_harmonic(cls, root):
-        # Start with the root note number
-        start_note = letter_to_note(root)
+    def create_harmonic(cls, root):
+        start_note = letter_to_note(root.upper())
 
         if start_note is None:
             raise ValueError(f"Invalid note: {root}")
 
-        # Define the intervals for a harmonic minor scale: W, H, W, W, H, A2, H
         intervals = [WHOLE_STEP, HALF_STEP, WHOLE_STEP, WHOLE_STEP, HALF_STEP, AUGMENTED_SECOND, HALF_STEP]
         
-        # Generate the notes of the scale based on the intervals
         notes = []
         current_note = start_note
-        for i in range(8):  # Minor scale has 7 distinct pitches + an octave
+        for i in range(8):  
             if i == 0:
                 notes.append(current_note)
             else:
@@ -87,33 +83,28 @@ class Scale:
         return cls(notes)
 
     @classmethod
-    def minor_melodic(cls, root):
-        # Start with the root note number
-        start_note = letter_to_note(root)
-
+    def create_melodic(cls, root):
+        start_note = letter_to_note(root.upper())
+        
         if start_note is None:
             raise ValueError(f"Invalid note: {root}")
     
-        # Define the intervals for a melodic minor scale ascending: W, H, W, W, W, W, H
         intervals_asc = [WHOLE_STEP, HALF_STEP, WHOLE_STEP, WHOLE_STEP, WHOLE_STEP, WHOLE_STEP, HALF_STEP]
         
-        # Generate the notes of the scale based on the intervals for ascending
         notes_asc = []
         current_note = start_note
-        for i in range(8):  # Minor scale has 7 distinct pitches + an octave
+        for i in range(8):  
             if i == 0:
                 notes_asc.append(current_note)
             else:
                 current_note += intervals_asc[i - 1]
                 notes_asc.append(current_note)
-        
-        # Define the intervals for a melodic minor scale descending: W, H, W, W, H, W, W
+
         intervals_desc = [WHOLE_STEP, HALF_STEP, WHOLE_STEP, WHOLE_STEP, HALF_STEP, WHOLE_STEP, WHOLE_STEP]
 
-        # Generate the notes of the scale based on the intervals for descending
         notes_desc = []
         current_note = start_note
-        for i in range(8):  # Minor scale has 7 distinct pitches + an octave
+        for i in range(8):  
             if i == 0:
                 notes_desc.append(current_note)
             else:
@@ -122,19 +113,29 @@ class Scale:
         
         return cls(notes_asc), cls(reversed(notes_desc))
 
-    def get_notes(self):
-        return [note_to_letter(note) for note in self.notes]
-
-# Example usage
-major_c = Scale.major('C')
+    def relative_major_key(self):
+        # Define a dictionary to map each minor key to its corresponding relative major key
+        relative_majors = {
+            'A': 'C#',
+            'A#': 'D#',
+            'B': 'E',
+            'C': 'Eb',
+            'C#': 'F',
+            'D': 'F#',
+            'D#': 'G#',
+            'E': 'A',
+            'F': 'Ab',
+            'F#': 'Bb',
+            'G': 'B',
+            'G#': 'C'
+        }
+        
+# examples
+major_c = MajorScale.create('C')
 print("Major C:", major_c.get_notes())
-
-natural_minor_a = Scale.minor_natural('A')
-print("Natural Minor A:", natural_minor_a.get_notes())
-
-harmonic_minor_a = Scale.minor_harmonic('A')
+harmonic_minor_a = MinorScale.create_harmonic('A')
 print("Harmonic Minor A:", harmonic_minor_a.get_notes())
 
-melodic_minor_a_asc, melodic_minor_a_desc = Scale.minor_melodic('A')
+melodic_minor_a_asc, melodic_minor_a_desc = MinorScale.create_melodic('A')
 print("Melodic Minor A (Ascending):", melodic_minor_a_asc.get_notes())
 print("Melodic Minor A (Descending):", melodic_minor_a_desc.get_notes())
