@@ -23,5 +23,10 @@ class TestScales(unittest.TestCase):
         _, melodic_a_desc = MinorScale.create_melodic('A')
         self.assertEqual(melodic_a_desc.get_notes(), ['A', 'G', 'F', 'E', 'D', 'C', 'B', 'A'])
 
-if __name__ == '__main__':
-    unittest.main()
+    def test_relative_minor_key_major_c(self):
+        self.assertEqual(MajorScale.create('C').root, MinorScale.create_harmonic('A').relative_major().root)
+
+    def test_relative_major_key_minor_a(self):
+        self.assertEqual(MinorScale.create_harmonic('A').root, MajorScale.create('C').relative_minor_key().root, )
+
+

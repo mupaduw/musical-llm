@@ -4,7 +4,6 @@ support western scale theory
 Examples:
 
     ```python
-
     # examples
     major_c = MajorScale.create('C')
     print("Major C:", major_c.get_notes())
@@ -43,6 +42,7 @@ class Scale:
 
     def __init__(self, notes):
         self.notes = notes
+        self.root = note_to_letter(self.notes[0])
 
     def get_notes(self):
         """
@@ -91,6 +91,19 @@ class MajorScale(Scale):
                 notes.append(current_note)
         
         return cls(notes)
+
+    def relative_minor_key(self):
+        """
+        Returns the relative minor key of this major scale.
+        
+        Returns:
+            MinorScale: A new MinorScale object representing the natural minor key.
+        """
+        relative_minor_index = (self.notes[5] - self.notes[0]) % 12
+        minor_root_note_number = (self.notes[0] + relative_minor_index) % 12
+        minor_scale = MinorScale.create_natural(note_to_letter(minor_root_note_number))
+        return minor_scale
+    
 
 class MinorScale(Scale):
     """
@@ -204,28 +217,16 @@ class MinorScale(Scale):
                 current_note += intervals_desc[i - 1]
                 notes_desc.append(current_note)
         
-        return cls(notes_asc), cls(reversed(notes_desc))
+        return cls(notes_asc), cls(list(reversed(notes_desc)))
 
-    def relative_major_key(self):
+    def relative_major(self):
         """
         Returns the relative major key for this minor scale.
         
         Returns:
-            str: The relative major key as a string (e.g., 'C#', 'Eb').
+            MajorScale: A new instance of the relative major key as a MajorScale object.
         """
-        # Define a dictionary to map each minor key to its corresponding relative major key
-        relative_majors = {
-            'A': 'C#',
-            'A#': 'D#',
-            'B': 'E',
-            'C': 'Eb',
-            'C#': 'F',
-            'D': 'F#',
-            'D#': 'G#',
-            'E': 'A',
-            'F': 'Ab',
-            'F#': 'Bb',
-            'G': 'B',
-            'G#': 'C'
-        }
+        # Get the third note in the scale, which is the root of the relative major key
+        relative_major_root = self.notes[2]
+        return MajorScale.create(note_to_letter(relative_major_root))
 
