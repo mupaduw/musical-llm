@@ -95,7 +95,7 @@ class MajorScale(Scale):
     def relative_minor_key(self):
         """
         Returns the relative minor key of this major scale.
-        
+               
         Returns:
             MinorScale: A new MinorScale object representing the natural minor key.
         """
@@ -223,6 +223,10 @@ class MinorScale(Scale):
         """
         Returns the relative major key for this minor scale.
         
+        This approach simplifies the concept of relative keys by ignoring the complexities of melodic 
+        minor scales and provides a straightforward way to determine the relative major scale for any 
+        given minor key.
+
         Returns:
             MajorScale: A new instance of the relative major key as a MajorScale object.
         """
