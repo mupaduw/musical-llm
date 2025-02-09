@@ -1,3 +1,23 @@
+"""
+support western scale theory
+
+Examples:
+
+    ```python
+
+    # examples
+    major_c = MajorScale.create('C')
+    print("Major C:", major_c.get_notes())
+    
+    harmonic_minor_a = MinorScale.create_harmonic('A')
+    print("Harmonic Minor A:", harmonic_minor_a.get_notes())
+
+    melodic_minor_a_asc, melodic_minor_a_desc = MinorScale.create_melodic('A')
+    print("Melodic Minor A (Ascending):", melodic_minor_a_asc.get_notes())
+    print("Melodic Minor A (Descending):", melodic_minor_a_desc.get_notes())
+    ```
+"""
+
 # Constants
 HALF_STEP = 1
 WHOLE_STEP = 2
@@ -14,15 +34,46 @@ def letter_to_note(note_letter):
     return notes.get(note_letter.upper(), None)
 
 class Scale:
+    """
+    Represents a musical scale.
+    
+    Attributes:
+        notes (list of int): The note numbers that make up the scale.
+    """
+
     def __init__(self, notes):
         self.notes = notes
 
     def get_notes(self):
+        """
+        Returns the note letters for this scale.
+        
+        Returns:
+            list of str: A list containing the note letters.
+        """
         return [note_to_letter(note) for note in self.notes]
 
 class MajorScale(Scale):
+    """
+    Represents a major musical scale.
+    
+    Inherits from Scale.
+    """
+
     @classmethod
     def create(cls, root):
+        """
+        Creates a new instance of MajorScale with the given root note.
+        
+        Args:
+            root (str): The root note for this scale (e.g., 'C', 'D#').
+            
+        Returns:
+            MajorScale: A new MajorScale object.
+        
+        Raises:
+            ValueError: If an invalid note is provided.
+        """
         start_note = letter_to_note(root.upper())
 
         if start_note is None:
@@ -32,7 +83,7 @@ class MajorScale(Scale):
         
         notes = []
         current_note = start_note
-        for i in range(8):  
+        for i in range(8):
             if i == 0:
                 notes.append(current_note)
             else:
@@ -42,8 +93,26 @@ class MajorScale(Scale):
         return cls(notes)
 
 class MinorScale(Scale):
+    """
+    Represents a minor musical scale.
+    
+    Inherits from Scale.
+    """
+
     @classmethod
     def create_natural(cls, root):
+        """
+        Creates a new instance of MinorScale with the given natural minor root note.
+        
+        Args:
+            root (str): The root note for this scale (e.g., 'A', 'C').
+            
+        Returns:
+            MinorScale: A new MinorScale object.
+        
+        Raises:
+            ValueError: If an invalid note is provided.
+        """
         start_note = letter_to_note(root.upper())
 
         if start_note is None:
@@ -53,7 +122,7 @@ class MinorScale(Scale):
         
         notes = []
         current_note = start_note
-        for i in range(8):  
+        for i in range(8):
             if i == 0:
                 notes.append(current_note)
             else:
@@ -64,6 +133,18 @@ class MinorScale(Scale):
 
     @classmethod
     def create_harmonic(cls, root):
+        """
+        Creates a new instance of MinorScale with the given harmonic minor root note.
+        
+        Args:
+            root (str): The root note for this scale (e.g., 'A', 'C').
+            
+        Returns:
+            MinorScale: A new MinorScale object.
+        
+        Raises:
+            ValueError: If an invalid note is provided.
+        """
         start_note = letter_to_note(root.upper())
 
         if start_note is None:
@@ -73,7 +154,7 @@ class MinorScale(Scale):
         
         notes = []
         current_note = start_note
-        for i in range(8):  
+        for i in range(8):
             if i == 0:
                 notes.append(current_note)
             else:
@@ -84,6 +165,18 @@ class MinorScale(Scale):
 
     @classmethod
     def create_melodic(cls, root):
+        """
+        Creates a new instance of MinorScale with the given melodic minor root note.
+        
+        Args:
+            root (str): The root note for this scale (e.g., 'A', 'C').
+            
+        Returns:
+            tuple: A tuple containing two MinorScale objects - one for ascending and one for descending.
+        
+        Raises:
+            ValueError: If an invalid note is provided.
+        """
         start_note = letter_to_note(root.upper())
         
         if start_note is None:
@@ -93,7 +186,7 @@ class MinorScale(Scale):
         
         notes_asc = []
         current_note = start_note
-        for i in range(8):  
+        for i in range(8):
             if i == 0:
                 notes_asc.append(current_note)
             else:
@@ -104,7 +197,7 @@ class MinorScale(Scale):
 
         notes_desc = []
         current_note = start_note
-        for i in range(8):  
+        for i in range(8):
             if i == 0:
                 notes_desc.append(current_note)
             else:
@@ -114,6 +207,12 @@ class MinorScale(Scale):
         return cls(notes_asc), cls(reversed(notes_desc))
 
     def relative_major_key(self):
+        """
+        Returns the relative major key for this minor scale.
+        
+        Returns:
+            str: The relative major key as a string (e.g., 'C#', 'Eb').
+        """
         # Define a dictionary to map each minor key to its corresponding relative major key
         relative_majors = {
             'A': 'C#',
@@ -129,13 +228,4 @@ class MinorScale(Scale):
             'G': 'B',
             'G#': 'C'
         }
-        
-# examples
-major_c = MajorScale.create('C')
-print("Major C:", major_c.get_notes())
-harmonic_minor_a = MinorScale.create_harmonic('A')
-print("Harmonic Minor A:", harmonic_minor_a.get_notes())
 
-melodic_minor_a_asc, melodic_minor_a_desc = MinorScale.create_melodic('A')
-print("Melodic Minor A (Ascending):", melodic_minor_a_asc.get_notes())
-print("Melodic Minor A (Descending):", melodic_minor_a_desc.get_notes())
