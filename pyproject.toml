@@ -1,23 +1,22 @@
-[tool.poetry]
+[project]
 name = "music-theory"
 version = "0.1.0"
 description = "A library to provide some concise musical theory for training/testing LLMs"
-authors = ["Chris Chamberlain <chrisbc@artisan.co.nz>"]
-license = "AGPL3"
+license = {text = "AGPL 3"}
 readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+    {name = "Chris B Chamberlain", email = "chrisbc@artisan.co.nz"}
+]
 
 packages = [
 	{include = "music_theory"},
     {include = "tests" }
 ]
 
-[tool.poetry.dependencies]
-python = ">=3.11"
-
-
 [tool.poetry.group.dev.dependencies]
-pytest = "^8.3.4"
+pytest = "^8.3.5"
 
 [build-system]
-requires = ["poetry-core"]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
